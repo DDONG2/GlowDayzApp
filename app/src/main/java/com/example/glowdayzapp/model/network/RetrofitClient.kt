@@ -15,7 +15,7 @@ object RetrofitClient {
         }.build()
     }
 
-    private const val BASE_URL = ""
+    private const val BASE_URL = "https://s3.ap-northeast-2.amazonaws.com/public.glowday.com/"
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
