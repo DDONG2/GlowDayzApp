@@ -15,9 +15,8 @@ class ProductRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var productsList :ProductResponse
 
 
-    fun setProductList(weatherList : ProductResponse){
-        this.productsList = weatherList
-        notifyDataSetChanged()
+    fun setProductList(productList : ProductResponse){
+        this.productsList = productList
     }
 
     override fun getItemViewType(position: Int): Int {

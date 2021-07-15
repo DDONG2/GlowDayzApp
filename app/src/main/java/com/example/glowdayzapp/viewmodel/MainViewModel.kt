@@ -7,6 +7,7 @@ import com.example.glowdayzapp.BaseViewModel
 import com.example.glowdayzapp.model.repository.ProductRepository
 import com.example.glowdayzapp.model.repository.ProductRepositoryImpl
 import com.example.glowdayzapp.model.vo.ProductResponse
+import com.example.glowdayzapp.model.vo.ProductVO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,18 +24,48 @@ class MainViewModel : BaseViewModel() {
     val ProductLiveData: LiveData<ProductResponse>
         get() = _ProductLiveData
 
+    private val _MoreProductLiveData = MutableLiveData<ProductResponse>()
+    val MoreProductLiveData: LiveData<ProductResponse>
+        get() = _MoreProductLiveData
+
     private val _ErrorMessage = MutableLiveData<String>()
     val ErrorMessage: LiveData<String>
         get() = _ErrorMessage
 
 
-    fun getProductInfo() {
+    private  var TempProduct = mutableListOf<ProductVO>()
+
+    private lateinit var MoreProductResponse: ProductResponse
+
+
+    fun getProductInfo(page :Int) {
         viewModelScope.launch {
-            val response = productRepository.requestProductApi(1)
-            withContext(Dispatchers.Main) { //withContext() 의 다음 코드를 수행하지 않습니다. withContext()가 수행되고 난후 다음 코드가 실행됩니다.  또한 UI 변경등은 Main쓰레드 에서 실행해야합니다.
+            val response = productRepository.requestProductApi(page)
+            withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
 
+                    response.body()?.let { TempProduct.addAll(it.products) }
+
                     _ProductLiveData.value = response.body()
+
+                } else {
+                    onError("Error : ${response.message()} ")
+                }
+            }
+        }
+    }
+
+    fun getMoreProductInfo(page :Int) {
+        viewModelScope.launch {
+            val response = productRepository.requestProductApi(page)
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+
+                    response.body()?.let { TempProduct.addAll(it.products) }
+
+                    MoreProductResponse = ProductResponse(TempProduct)
+
+                    _MoreProductLiveData.value = MoreProductResponse
 
                 } else {
                     onError("Error : ${response.message()} ")
