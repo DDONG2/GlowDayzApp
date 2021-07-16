@@ -16,7 +16,7 @@
         android:name="com.example.glowdayzapp.view.ProductDetailFragment"
         android:label="상품상세" >
         <argument
-            android:name="ProductVo"
+            android:name="productVO"
             app:argType="com.example.glowdayzapp.model.vo.ProductVO" />
     </fragment>
 </navigation>

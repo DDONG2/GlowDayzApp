@@ -33,11 +33,11 @@ class ProductDetailFragment : BaseFragment<FragmentProductDetailBinding, MainVie
             findNavController().popBackStack()
         }
 
-//        Glide.with(requireActivity())
-//            .load(args.productVo.imageUrl)
-//            .into(dataBinding.productImage)
-//
-//        dataBinding.productTitle.text = args.productVo.productTitle
+        Glide.with(requireActivity())
+            .load(args.productVO.imageUrl)
+            .into(dataBinding.productImage)
+
+        dataBinding.productTitle.text = args.productVO.productTitle
 
     }
 
