@@ -33,31 +33,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
         findNavController().navigate(action)
     }
 
+    private val HorizontalItemClickListener: (ProductVO) -> Unit = {
+
+
+    }
+
     override fun createObserveData() {
         viewModel.ProductLiveData.observe(this, Observer {
 
-            mainAdapter.setProductList(it)
-
-            dataBinding.recyclerView.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = mainAdapter
-            }
+            mainAdapter.setProductList(it.products)
 
             dataBinding.loadingProgressBar.visibility = View.GONE
+        })
 
+        viewModel.RecommendProductLiveData.observe(this, Observer {
+
+            mainAdapter.setRecommendProductList(it)
+
+
+            dataBinding.loadingProgressBar.visibility = View.GONE
 
         })
 
         viewModel.MoreProductLiveData.observe(this, Observer {
 
-            mainAdapter.setProductList(it)
-            mainAdapter.notifyDataSetChanged()
+            mainAdapter.setProductList(it.products)
 
             dataBinding.loadingProgressBar.visibility = View.GONE
 
-
         })
-
 
         viewModel.ErrorMessage.observe(this, {
             Toast.makeText(requireContext(), "더 이상 불러올 목록이 없습니다.", Toast.LENGTH_SHORT).show()
@@ -69,8 +73,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
 
     override fun initView() {
 
-
-        mainAdapter = ProductRecyclerAdapter(VerticalItemClickListener)
+        mainAdapter = ProductRecyclerAdapter(VerticalItemClickListener, HorizontalItemClickListener)
+        dataBinding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mainAdapter
+        }
 
         dataBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -93,7 +100,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
     }
 
     override fun initArgument(bundle: Bundle) {
-        viewModel.getProductInfo()
 
     }
 

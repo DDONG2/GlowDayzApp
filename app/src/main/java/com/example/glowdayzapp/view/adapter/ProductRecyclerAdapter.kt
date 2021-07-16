@@ -5,27 +5,38 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.glowdayzapp.databinding.HorizontalProductContainerBinding
 import com.example.glowdayzapp.databinding.ItemVerticalProductBinding
-import com.example.glowdayzapp.model.vo.ProductListViewType
-import com.example.glowdayzapp.model.vo.ProductResponse
-import com.example.glowdayzapp.model.vo.ProductVO
+import com.example.glowdayzapp.model.vo.*
 import com.example.glowdayzapp.view.viewholder.ProductHorizontalViewHolder
 import com.example.glowdayzapp.view.viewholder.ProductVerticalItemViewHolder
 
-class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: ProductVO) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: ProductVO) -> Unit, private val HorizontalItemClickListener: (product: ProductVO) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private lateinit var productsList :ProductResponse
+    private  var productsList :List<ProductVO> = listOf<ProductVO>()
+
+    private lateinit var recommendproductsList : ProductRecommResponse
 
 
-    fun setProductList(productList : ProductResponse){
+    fun setProductList(productList : List<ProductVO>){
         this.productsList = productList
+        notifyDataSetChanged()
+    }
+
+
+    fun setRecommendProductList(recommendProductList : ProductRecommResponse){
+        this.recommendproductsList = recommendProductList
     }
 
     override fun getItemViewType(position: Int): Int {
-        return ProductListViewType.VERTICAL.value
 
+
+        if (position == 11 || position == 21 || position == 31)
+            return ProductListViewType.HORIZONTAL.value
+
+        return ProductListViewType.VERTICAL.value
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
         when(viewType) {
 
             ProductListViewType.VERTICAL.value -> {
@@ -35,20 +46,21 @@ class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: Pr
 
             else -> {
                 val binding = HorizontalProductContainerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return ProductHorizontalViewHolder(binding.root, parent.context)
+                return ProductHorizontalViewHolder(binding.root, parent.context, HorizontalItemClickListener)
             }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
         if (holder is ProductVerticalItemViewHolder)
-            holder.bind(productsList.products.get(position))
-        else
-            return
+            holder.bind(productsList.get(position))
+        else if(holder is ProductHorizontalViewHolder)
+            holder.bind(recommendproductsList)
     }
 
     override fun getItemCount(): Int {
-        return productsList.products.size
+        return productsList.size
     }
 
 
