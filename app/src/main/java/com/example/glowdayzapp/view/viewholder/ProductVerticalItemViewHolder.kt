@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.glowdayzapp.databinding.ItemVerticalProductBinding
 import com.example.glowdayzapp.model.vo.ProductVO
 
-class ProductVerticalItemViewHolder (itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+class ProductVerticalItemViewHolder (itemView: View, private val context: Context, private val VerticalItemClickListener: (product: ProductVO) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
     private var binding: ItemVerticalProductBinding
 
@@ -44,7 +44,9 @@ class ProductVerticalItemViewHolder (itemView: View, private val context: Contex
         item.reviewCount?.let {
             binding.reviewCount.text = "(리뷰 " + it + ")"
         }
-
+        binding.fullLayout.setOnClickListener{
+            VerticalItemClickListener(item)
+        }
 
 
 

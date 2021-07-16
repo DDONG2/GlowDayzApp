@@ -6,11 +6,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.glowdayzapp.BaseFragment
 import com.example.glowdayzapp.R
 import com.example.glowdayzapp.databinding.FragmentHomeBinding
+import com.example.glowdayzapp.model.vo.ProductResponse
+import com.example.glowdayzapp.model.vo.ProductVO
 import com.example.glowdayzapp.view.adapter.ProductRecyclerAdapter
 import com.example.glowdayzapp.viewmodel.MainViewModel
 
@@ -25,7 +28,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
 
     private lateinit var mainAdapter: ProductRecyclerAdapter
 
-    private var pageNumber: Int = 1
+    private val VerticalItemClickListener: (ProductVO) -> Unit = {
+        val action = HomeFragmentDirections.actionProductDetailFragment(it)
+        findNavController().navigate(action)
+    }
 
     override fun createObserveData() {
         viewModel.ProductLiveData.observe(this, Observer {
@@ -63,9 +69,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
 
     override fun initView() {
 
-        dataBinding.loadingProgressBar.visibility = View.VISIBLE
 
-        mainAdapter = ProductRecyclerAdapter()
+        mainAdapter = ProductRecyclerAdapter(VerticalItemClickListener)
 
         dataBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -78,23 +83,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
 
                     dataBinding.loadingProgressBar.visibility = View.VISIBLE
 
-                    pageNumber++
-
-                    viewModel.getMoreProductInfo(pageNumber)
+                    viewModel.getMoreProductInfo()
 
                 }
             }
         })
 
-        viewModel.getProductInfo(pageNumber)
-
 
     }
 
     override fun initArgument(bundle: Bundle) {
+        viewModel.getProductInfo()
 
     }
 
+    override fun initFirstData() {
+        viewModel.getProductInfo()
+    }
 
     companion object {
 

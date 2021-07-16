@@ -1,7 +1,10 @@
 package com.example.glowdayzapp.model.vo
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ProductVO(
     @SerializedName("idProduct")
     var idProduct: Int = 0,
@@ -41,4 +44,4 @@ data class ProductVO(
 
     @SerializedName("brand")
     var brand: brandVO
-)
+) : Parcelable

@@ -22,6 +22,7 @@ abstract class BaseFragment<LAYOUT: ViewDataBinding, VM: BaseViewModel> : Fragme
 
     abstract fun initArgument(bundle: Bundle)
 
+    abstract fun initFirstData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +30,9 @@ abstract class BaseFragment<LAYOUT: ViewDataBinding, VM: BaseViewModel> : Fragme
         arguments?.run {
             initArgument(this)
         }
+
+        initFirstData()
+        
     }
 
     override fun onCreateView(

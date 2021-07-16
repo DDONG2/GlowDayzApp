@@ -7,10 +7,11 @@ import com.example.glowdayzapp.databinding.HorizontalProductContainerBinding
 import com.example.glowdayzapp.databinding.ItemVerticalProductBinding
 import com.example.glowdayzapp.model.vo.ProductListViewType
 import com.example.glowdayzapp.model.vo.ProductResponse
+import com.example.glowdayzapp.model.vo.ProductVO
 import com.example.glowdayzapp.view.viewholder.ProductHorizontalViewHolder
 import com.example.glowdayzapp.view.viewholder.ProductVerticalItemViewHolder
 
-class ProductRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: ProductVO) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var productsList :ProductResponse
 
@@ -29,7 +30,7 @@ class ProductRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             ProductListViewType.VERTICAL.value -> {
                 val binding = ItemVerticalProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                return ProductVerticalItemViewHolder(binding.root, parent.context)
+                return ProductVerticalItemViewHolder(binding.root, parent.context, VerticalItemClickListener)
             }
 
             else -> {

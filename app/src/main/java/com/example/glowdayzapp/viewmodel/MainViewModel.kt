@@ -32,15 +32,16 @@ class MainViewModel : BaseViewModel() {
     val ErrorMessage: LiveData<String>
         get() = _ErrorMessage
 
+    private var pageNumber: Int = 1
 
     private  var TempProduct = mutableListOf<ProductVO>()
 
     private lateinit var MoreProductResponse: ProductResponse
 
 
-    fun getProductInfo(page :Int) {
+    fun getProductInfo() {
         viewModelScope.launch {
-            val response = productRepository.requestProductApi(page)
+            val response = productRepository.requestProductApi(pageNumber)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
 
@@ -55,9 +56,12 @@ class MainViewModel : BaseViewModel() {
         }
     }
 
-    fun getMoreProductInfo(page :Int) {
+    fun getMoreProductInfo() {
+
+        pageNumber++
+
         viewModelScope.launch {
-            val response = productRepository.requestProductApi(page)
+            val response = productRepository.requestProductApi(pageNumber)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
 
