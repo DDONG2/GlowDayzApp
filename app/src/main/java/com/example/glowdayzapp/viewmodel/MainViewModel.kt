@@ -1,18 +1,20 @@
 package com.example.glowdayzapp.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.glowdayzapp.BaseViewModel
 import com.example.glowdayzapp.model.repository.ProductRepository
 import com.example.glowdayzapp.model.repository.ProductRepositoryImpl
+import com.example.glowdayzapp.model.vo.ProductAllList
 import com.example.glowdayzapp.model.vo.ProductRecommResponse
 import com.example.glowdayzapp.model.vo.ProductResponse
 import com.example.glowdayzapp.model.vo.ProductVO
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 
 class MainViewModel : BaseViewModel() {
 
@@ -22,17 +24,13 @@ class MainViewModel : BaseViewModel() {
         productRepository = ProductRepositoryImpl()
     }
 
-    private val _ProductLiveData = MutableLiveData<ProductResponse>()
-    val ProductLiveData: LiveData<ProductResponse>
+    private val _ProductLiveData = MutableLiveData<List<ProductAllList>>()
+    val ProductLiveData: LiveData<List<ProductAllList>>
         get() = _ProductLiveData
 
-    private val _MoreProductLiveData = MutableLiveData<ProductResponse>()
-    val MoreProductLiveData: LiveData<ProductResponse>
+    private val _MoreProductLiveData = MutableLiveData<List<ProductAllList>>()
+    val MoreProductLiveData: LiveData<List<ProductAllList>>
         get() = _MoreProductLiveData
-
-    private val _RecommendProductLiveData = MutableLiveData<ProductRecommResponse>()
-    val RecommendProductLiveData: LiveData<ProductRecommResponse>
-        get() = _RecommendProductLiveData
 
 
     private val _ErrorMessage = MutableLiveData<String>()
@@ -41,44 +39,41 @@ class MainViewModel : BaseViewModel() {
 
     private var pageNumber: Int = 1
 
-    private  var TempProduct = mutableListOf<ProductVO>()
+    private var TempProduct = mutableListOf<ProductVO>()
 
-    private lateinit var MoreProductResponse: ProductResponse
+    private val productAllList = mutableListOf<ProductAllList>()
 
-    //요구사항 왜 이렇게 작성 하였는지등 왜썻는지 장점 단점 ReadME
 
-    fun getProductInfo() {
-        viewModelScope.launch {
+    private lateinit var recommendproductsList : ProductRecommResponse
 
-            val response = productRepository.requestProductApi(pageNumber)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    //flow zip merge 결과값 파라미터 2개가 온다. 스코프를 따로 나눈다. 순서 상관 없이 두개 결과가 모두올때
-                    response.body()?.let { TempProduct.addAll(it.products) }
 
-                    _ProductLiveData.value = response.body()
-                } else {
-                    onError("Error : ${response.message()} ")
-                }
-            }
-        }
-
-        //Io 2개 레트로핏 결과 MAin -> viewModel PostValue
+    fun getProductFirstInfo() {
 
         viewModelScope.launch {
-            val response = productRepository.requestRecommendProductApi()
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-
-                    _RecommendProductLiveData.value = response.body()
-
-                } else {
-                    onError("Error : ${response.message()} ")
-                }
-            }
+                val productResponse = async { productRepository.requestProductApi(pageNumber) }
+                val recommendResponse = async { productRepository.requestRecommendProductApi() }
+                computeResult(productResponse.await(), recommendResponse.await())
         }
 
     }
+
+    private fun computeResult(productResponse: Response<ProductResponse>, recommendResponse: Response<ProductRecommResponse>) {
+
+         recommendResponse.body()?.let {
+             recommendproductsList = it
+         }
+
+        productResponse.body()?.products?.forEach {
+            productAllList.add(ProductAllList(it,null))
+        }
+        productAllList.add(10, ProductAllList(null, recommendproductsList.recommend1))
+        productAllList.add(20, ProductAllList(null, recommendproductsList.recommend2))
+
+        _ProductLiveData.value = productAllList
+
+
+    }
+
 
     fun getMoreProductInfo() {
 
@@ -89,11 +84,16 @@ class MainViewModel : BaseViewModel() {
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
 
-                    response.body()?.let { TempProduct.addAll(it.products) }
+                    response.body()?.products?.forEach {
+                        productAllList.add(ProductAllList(it,null))
+                    }
 
-                    MoreProductResponse = ProductResponse(TempProduct)
+                    if(pageNumber == 2) {
+                        productAllList.add(31, ProductAllList(null, recommendproductsList.recommend3)
+                        )
+                    }
 
-                    _MoreProductLiveData.value = MoreProductResponse
+                    _MoreProductLiveData.value = productAllList
 
                 } else {
                     onError("Error : ${response.message()} ")
@@ -103,7 +103,7 @@ class MainViewModel : BaseViewModel() {
     }
 
     private fun onError(message: String) {
-        _ErrorMessage.postValue(message)
+        _ErrorMessage.value = message
     }
 }
 

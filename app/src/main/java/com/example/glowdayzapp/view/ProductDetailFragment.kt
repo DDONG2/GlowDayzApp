@@ -7,9 +7,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.glowdayzapp.BaseFragment
 import com.example.glowdayzapp.R
-import com.example.glowdayzapp.databinding.FragmentHomeBinding
 import com.example.glowdayzapp.databinding.FragmentProductDetailBinding
-import com.example.glowdayzapp.model.vo.ProductVO
 import com.example.glowdayzapp.viewmodel.MainViewModel
 
 class ProductDetailFragment : BaseFragment<FragmentProductDetailBinding, MainViewModel>() {
@@ -33,11 +31,20 @@ class ProductDetailFragment : BaseFragment<FragmentProductDetailBinding, MainVie
             findNavController().popBackStack()
         }
 
-        Glide.with(requireActivity())
-            .load(args.productVO.imageUrl)
-            .into(dataBinding.productImage)
+        if (args.productRecommendVO == null && args.productVO != null) {
+            Glide.with(requireActivity())
+                .load(args.productVO?.imageUrl)
+                .into(dataBinding.productImage)
 
-        dataBinding.productTitle.text = args.productVO.productTitle
+            dataBinding.productTitle.text = args.productVO?.productTitle
+        } else if (args.productRecommendVO != null && args.productVO == null) {
+            Glide.with(requireActivity())
+                .load(args.productRecommendVO?.imageUrl)
+                .into(dataBinding.productImage)
+
+            dataBinding.productTitle.text = args.productRecommendVO?.productTitle
+        }
+
 
     }
 

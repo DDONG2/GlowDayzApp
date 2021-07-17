@@ -10,6 +10,9 @@
         <action
             android:id="@+id/action_productDetailFragment"
             app:destination="@id/productDetailFragment" />
+        <action
+            android:id="@+id/action_productDetailFragment2"
+            app:destination="@id/productDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/productDetailFragment"
@@ -17,6 +20,11 @@
         android:label="상품상세" >
         <argument
             android:name="productVO"
-            app:argType="com.example.glowdayzapp.model.vo.ProductVO" />
+            app:argType="com.example.glowdayzapp.model.vo.ProductVO"
+            app:nullable="true"/>
+        <argument
+            android:name="productRecommendVO"
+            app:argType="com.example.glowdayzapp.model.vo.RecommendProductVO"
+            app:nullable="true"/>
     </fragment>
 </navigation>

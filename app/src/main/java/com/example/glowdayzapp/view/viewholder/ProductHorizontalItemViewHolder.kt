@@ -6,12 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.glowdayzapp.databinding.ItemHorizontalProductBinding
-import com.example.glowdayzapp.databinding.ItemVerticalProductBinding
-import com.example.glowdayzapp.model.vo.ProductRecommResponse
-import com.example.glowdayzapp.model.vo.ProductResponse
-import com.example.glowdayzapp.model.vo.ProductVO
+import com.example.glowdayzapp.model.vo.*
 
-class ProductHorizontalItemViewHolder (itemView: View, private val context: Context, private val HorizontalItemClickListener: (product: ProductVO) -> Unit) : RecyclerView.ViewHolder(itemView) {
+class ProductHorizontalItemViewHolder (itemView: View, private val context: Context, private val HorizontalItemClickListener: (product: RecommendProductVO) -> Unit) : RecyclerView.ViewHolder(itemView) {
 
     private var binding: ItemHorizontalProductBinding
 
@@ -20,13 +17,28 @@ class ProductHorizontalItemViewHolder (itemView: View, private val context: Cont
     }
 
 
-    fun bind(item: ProductRecommResponse) {
-        item.recommend1.get(0).imageUrl?.let{
+    fun bind(item: RecommendProductVO) {
+        item.imageUrl?.let{
             Glide.with(context)
                 .load(it)
-                .into(binding.productImage)
+                .into(binding.productImageRecommend)
         }
 
+        item.productTitle?.let{
+            binding.productTitleRecommend.text = it
+        }
+
+        item.ratingAvg?.let {
+            binding.ratingAvgRecommend.text = it.toString()
+        }
+
+        item.reviewCount?.let {
+            binding.reviewCountRecommend.text = "(리뷰 " + it + ")"
+        }
+
+        binding.fullLayoutRecommend.setOnClickListener{
+            item?.let { it -> HorizontalItemClickListener(it) }
+        }
     }
 
 }

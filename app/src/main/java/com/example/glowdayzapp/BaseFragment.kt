@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.NavHostFragment
 
 abstract class BaseFragment<LAYOUT: ViewDataBinding, VM: BaseViewModel> : Fragment() {
 
@@ -32,7 +34,7 @@ abstract class BaseFragment<LAYOUT: ViewDataBinding, VM: BaseViewModel> : Fragme
         }
 
         initFirstData()
-        
+
     }
 
     override fun onCreateView(
@@ -50,4 +52,8 @@ abstract class BaseFragment<LAYOUT: ViewDataBinding, VM: BaseViewModel> : Fragme
         return dataBinding.root
     }
 
+    protected fun NavDirections.navigate(){
+        NavHostFragment.findNavController(this@BaseFragment).navigate(this)
+    }
 }
+

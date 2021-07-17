@@ -9,27 +9,21 @@ import com.example.glowdayzapp.model.vo.*
 import com.example.glowdayzapp.view.viewholder.ProductHorizontalViewHolder
 import com.example.glowdayzapp.view.viewholder.ProductVerticalItemViewHolder
 
-class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: ProductVO) -> Unit, private val HorizontalItemClickListener: (product: ProductVO) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: ProductVO) -> Unit, private val HorizontalItemClickListener: (product: RecommendProductVO) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private  var productsList :List<ProductVO> = listOf<ProductVO>()
-
-    private lateinit var recommendproductsList : ProductRecommResponse
+    private  var productsList :List<ProductAllList> = listOf<ProductAllList>()
 
 
-    fun setProductList(productList : List<ProductVO>){
+    fun setProductList(productList : List<ProductAllList>){
         this.productsList = productList
         notifyDataSetChanged()
     }
 
 
-    fun setRecommendProductList(recommendProductList : ProductRecommResponse){
-        this.recommendproductsList = recommendProductList
-    }
-
     override fun getItemViewType(position: Int): Int {
 
 
-        if (position == 11 || position == 21 || position == 31)
+        if (position == 10 || position == 20 || position == 30)
             return ProductListViewType.HORIZONTAL.value
 
         return ProductListViewType.VERTICAL.value
@@ -56,7 +50,7 @@ class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: Pr
         if (holder is ProductVerticalItemViewHolder)
             holder.bind(productsList.get(position))
         else if(holder is ProductHorizontalViewHolder)
-            holder.bind(recommendproductsList)
+            holder.bind(productsList.get(position))
     }
 
     override fun getItemCount(): Int {

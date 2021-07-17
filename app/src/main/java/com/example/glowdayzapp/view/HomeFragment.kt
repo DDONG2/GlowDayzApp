@@ -3,17 +3,15 @@ package com.example.glowdayzapp.view
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.glowdayzapp.BaseFragment
 import com.example.glowdayzapp.R
 import com.example.glowdayzapp.databinding.FragmentHomeBinding
-import com.example.glowdayzapp.model.vo.ProductResponse
 import com.example.glowdayzapp.model.vo.ProductVO
+import com.example.glowdayzapp.model.vo.RecommendProductVO
 import com.example.glowdayzapp.view.adapter.ProductRecyclerAdapter
 import com.example.glowdayzapp.viewmodel.MainViewModel
 
@@ -29,45 +27,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
     private lateinit var mainAdapter: ProductRecyclerAdapter
 
     private val VerticalItemClickListener: (ProductVO) -> Unit = {
-        val action = HomeFragmentDirections.actionProductDetailFragment(it)
-        findNavController().navigate(action)
+        HomeFragmentDirections.actionProductDetailFragment(it, null).navigate()
     }
 
-    private val HorizontalItemClickListener: (ProductVO) -> Unit = {
-
-
+    private val HorizontalItemClickListener: (RecommendProductVO) -> Unit = {
+        HomeFragmentDirections.actionProductDetailFragment(null, it).navigate()
     }
 
     override fun createObserveData() {
         viewModel.ProductLiveData.observe(this, Observer {
 
-            mainAdapter.setProductList(it.products)
+            mainAdapter.setProductList(it)
 
             dataBinding.loadingProgressBar.visibility = View.GONE
         })
 
-        viewModel.RecommendProductLiveData.observe(this, Observer {
-
-            mainAdapter.setRecommendProductList(it)
-
-
-            dataBinding.loadingProgressBar.visibility = View.GONE
-
-        })
 
         viewModel.MoreProductLiveData.observe(this, Observer {
 
-            mainAdapter.setProductList(it.products)
+            mainAdapter.setProductList(it)
 
             dataBinding.loadingProgressBar.visibility = View.GONE
 
         })
 
         viewModel.ErrorMessage.observe(this, {
-            Toast.makeText(requireContext(), "더 이상 불러올 목록이 없습니다.", Toast.LENGTH_SHORT).show()
             Log.d("Error", it)
             dataBinding.loadingProgressBar.visibility = View.GONE
-
         })
     }
 
@@ -78,6 +64,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mainAdapter
         }
+
+        dataBinding.loadingProgressBar.visibility = View.VISIBLE
 
         dataBinding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -97,6 +85,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
         })
 
 
+
     }
 
     override fun initArgument(bundle: Bundle) {
@@ -104,7 +93,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
     }
 
     override fun initFirstData() {
-        viewModel.getProductInfo()
+        viewModel.getProductFirstInfo()
     }
 
     companion object {
