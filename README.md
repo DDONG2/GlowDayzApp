@@ -2,7 +2,6 @@
 Language : Kotlin
 AAC(MVVM, ViewBinding, LiveData, Navigation)
 Opensource: Coroutine, Retrofit, okhttp, Glide, GSON, ViewModelScope
-TravisCI
 
 소개: 
 과제에서 주어진 요구사항을 만족하기 위해 2개의 Fragment를  jetpack-navigation을 통해 구현하였습니다.
