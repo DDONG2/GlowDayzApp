@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.glowdayzapp.R
 import com.example.glowdayzapp.databinding.ItemVerticalProductBinding
 import com.example.glowdayzapp.model.vo.ProductAllList
 import com.example.glowdayzapp.model.vo.ProductVO
@@ -23,6 +24,7 @@ class ProductVerticalItemViewHolder (itemView: View, private val context: Contex
         item.products?.imageUrl?.let{
             Glide.with(context)
                 .load(it)
+                .error(R.drawable.ic_launcher_background)
                 .into(binding.productImage)
         }
 

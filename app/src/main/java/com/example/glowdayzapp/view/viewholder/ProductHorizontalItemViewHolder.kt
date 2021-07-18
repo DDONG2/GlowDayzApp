@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.glowdayzapp.R
 import com.example.glowdayzapp.databinding.ItemHorizontalProductBinding
 import com.example.glowdayzapp.model.vo.*
 
@@ -21,6 +22,7 @@ class ProductHorizontalItemViewHolder (itemView: View, private val context: Cont
         item.imageUrl?.let{
             Glide.with(context)
                 .load(it)
+                .error(R.drawable.ic_launcher_background)
                 .into(binding.productImageRecommend)
         }
 

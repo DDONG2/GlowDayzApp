@@ -34,12 +34,14 @@ class ProductDetailFragment : BaseFragment<FragmentProductDetailBinding, MainVie
         if (args.productRecommendVO == null && args.productVO != null) {
             Glide.with(requireActivity())
                 .load(args.productVO?.imageUrl)
+                .error(R.drawable.ic_launcher_background)
                 .into(dataBinding.productImage)
 
             dataBinding.productTitle.text = args.productVO?.productTitle
         } else if (args.productRecommendVO != null && args.productVO == null) {
             Glide.with(requireActivity())
                 .load(args.productRecommendVO?.imageUrl)
+                .error(R.drawable.ic_launcher_background)
                 .into(dataBinding.productImage)
 
             dataBinding.productTitle.text = args.productRecommendVO?.productTitle

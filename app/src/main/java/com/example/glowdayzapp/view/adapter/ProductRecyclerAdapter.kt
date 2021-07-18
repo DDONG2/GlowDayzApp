@@ -23,7 +23,7 @@ class ProductRecyclerAdapter(private val VerticalItemClickListener: (product: Pr
     override fun getItemViewType(position: Int): Int {
 
 
-        if (position == 10 || position == 20 || position == 30)
+        if (position == 10 || position == 21 || position == 32)
             return ProductListViewType.HORIZONTAL.value
 
         return ProductListViewType.VERTICAL.value

@@ -67,7 +67,7 @@ class MainViewModel : BaseViewModel() {
             productAllList.add(ProductAllList(it,null))
         }
         productAllList.add(10, ProductAllList(null, recommendproductsList.recommend1))
-        productAllList.add(20, ProductAllList(null, recommendproductsList.recommend2))
+        productAllList.add(21, ProductAllList(null, recommendproductsList.recommend2))
 
         _ProductLiveData.value = productAllList
 
@@ -89,7 +89,7 @@ class MainViewModel : BaseViewModel() {
                     }
 
                     if(pageNumber == 2) {
-                        productAllList.add(31, ProductAllList(null, recommendproductsList.recommend3)
+                        productAllList.add(32, ProductAllList(null, recommendproductsList.recommend3)
                         )
                     }
 

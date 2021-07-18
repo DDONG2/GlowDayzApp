@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/full_layout_recommend"
+        android:id="@+id/fullLayoutRecommend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="15dp">
 
         <ImageView
-            android:id="@+id/product_image_recommend"
+            android:id="@+id/productImageRecommend"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/product_title_recommend"
+            android:id="@+id/productTitleRecommend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -25,10 +25,10 @@
             android:textStyle="bold"
             android:text="가가가가가가가"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_image_recommend" />
+            app:layout_constraintTop_toBottomOf="@+id/productImageRecommend" />
 
         <TextView
-            android:id="@+id/rating_avg_recommend"
+            android:id="@+id/ratingAvgRecommend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -36,18 +36,18 @@
             android:textStyle="bold"
             android:drawableLeft="@drawable/review_star"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/product_title_recommend" />
+            app:layout_constraintTop_toBottomOf="@+id/productTitleRecommend" />
 
         <TextView
-            android:id="@+id/review_count_recommend"
+            android:id="@+id/reviewCountRecommend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="12dp"
             android:textStyle="bold"
-            android:layout_marginLeft="10dp"
-            app:layout_constraintLeft_toRightOf="@+id/rating_avg_recommend"
-            app:layout_constraintTop_toBottomOf="@+id/product_title_recommend" />
+            android:layout_marginLeft="5dp"
+            app:layout_constraintLeft_toRightOf="@+id/ratingAvgRecommend"
+            app:layout_constraintTop_toBottomOf="@+id/productTitleRecommend" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
