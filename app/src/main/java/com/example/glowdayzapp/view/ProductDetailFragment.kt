@@ -63,7 +63,4 @@ class ProductDetailFragment : BaseFragment<FragmentProductDetailBinding, MainVie
 
     }
 
-    override fun initFirstData() {
-
-    }
 }

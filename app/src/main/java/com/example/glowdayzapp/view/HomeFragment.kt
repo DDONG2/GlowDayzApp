@@ -34,6 +34,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
         HomeFragmentDirections.actionProductDetailFragment(null, it).navigate()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.getProductFirstInfo()
+    }
+
     override fun createObserveData() {
         viewModel.ProductLiveData.observe(this, Observer {
 
@@ -90,10 +96,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, MainViewModel>() {
 
     override fun initArgument(bundle: Bundle) {
 
-    }
-
-    override fun initFirstData() {
-        viewModel.getProductFirstInfo()
     }
 
     companion object {
